@@ -2,24 +2,29 @@ package Permutation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Stack;
 
 public class Permutation {
     public static void main(String[] args) {
-        permutation(4, new ArrayList<Integer>(), 2);
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        permutation(m, new Stack<>(), n);
     }
 
-    private static void permutation(int n, List<Integer> picked, int left) {
+    private static void permutation(int length, Stack<Integer> picked, int left) {
         if (left == 0) {
             System.out.println(picked);
             return;
         }
 
-        int target = picked.isEmpty() ? 0 : picked.get(picked.size() - 1) + 1;
+        int target = picked.isEmpty() ? 0 : picked.peek() + 1;
 
-        for (int next = target; next < n; next++) {
-            picked.add(next);
-            permutation(n, picked, left - 1);
-            picked.remove(picked.size() - 1);
+        for (int next = target; next < length; next++) {
+            picked.push(next);
+            permutation(length, picked, left - 1);
+            picked.pop();
         }
     }
 }

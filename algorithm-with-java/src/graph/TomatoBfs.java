@@ -5,68 +5,65 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class TomatoBfs {
-    static Queue<Tomato> queue = new LinkedList<>();
-    static int[][] arr;
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int M = sc.nextInt();
-        int N = sc.nextInt();
-        arr = new int[N][M];
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        int[][] arr = new int[n][m];
+        Queue<Tomato> queue = new LinkedList<>();
+        int min = Integer.MIN_VALUE;
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++){
-                arr[i][j] = sc.nextInt();
-                if (arr[i][j] == 1) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int target = sc.nextInt();
+                arr[i][j] = target;
+
+                if (target == 1) {
                     queue.add(new Tomato(i, j));
                 }
             }
         }
 
-        System.out.println(bfs());
-    }
-
-    private static int bfs() {
+        // bfs로 토마토 익혀 나가기
         int[] dx = {1, -1, 0, 0};
         int[] dy = {0, 0, 1, -1};
-        int result = Integer.MIN_VALUE;
 
-        while(!queue.isEmpty()){
-            Tomato tomato = queue.poll();
+        while(!queue.isEmpty()) {
+            Tomato t = queue.poll();
 
             for (int i = 0; i < dx.length; i++) {
-                int nx = tomato.x + dx[i];
-                int ny = tomato.y + dy[i];
-
-                if (nx >= 0 && ny >= 0 && nx < arr.length && ny < arr[0].length && arr[nx][ny] == 0) {
-                    queue.add(new Tomato(nx, ny));
-                    arr[nx][ny] = arr[tomato.x][tomato.y] + 1;
+                int nx = t.x + dx[i];
+                int ny = t.y + dy[i];
+                if (nx >= 0 && ny >= 0 && nx < n && ny < m) {
+                    if (arr[nx][ny] == 0) {
+                        queue.add(new Tomato(nx, ny));
+                        arr[nx][ny] = arr[t.x][t.y] + 1;
+                    }
                 }
             }
         }
-        for (int i = 0; i < arr.length; i ++) {
-            for (int j = 0; j < arr[0].length; j++){
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 if (arr[i][j] == 0) {
-                    return -1;
+                    System.out.println(-1);
+                   return;
+                } else {
+                    min = Math.max(min, arr[i][j]);
                 }
-                result = Math.max(result, arr[i][j]);
             }
         }
-
-        if (result == 1) {
-            return 0;
-        }
-
-        return result - 1;
+        System.out.println(min - 1);
+        sc.close();
     }
-}
 
-class Tomato {
-    int x;
-    int y;
+    static class Tomato{
+        int x;
+        int y;
 
-    public Tomato(int x, int y) {
-        this.x = x;
-        this.y = y;
+        public Tomato(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

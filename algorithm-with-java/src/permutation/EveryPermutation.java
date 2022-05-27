@@ -23,11 +23,8 @@ public class EveryPermutation {
 
     private static void permutation(int[] targetArr, Stack<Integer> selection, boolean[] visited, int n, int left) {
         if (left == 0) {
-            StringBuilder sb = new StringBuilder();
-            for (int selected : selection) {
-                sb.append(selected).append(" ");
-            }
-            System.out.println(sb);
+            System.out.println(selection);
+            return;
         }
 
         for (int i = 0; i < n; i++) {

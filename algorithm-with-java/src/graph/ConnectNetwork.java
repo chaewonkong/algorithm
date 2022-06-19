@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class ConnectNetwork {
-
+    private static int[] parent;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -17,7 +17,7 @@ public class ConnectNetwork {
         int M = Integer.parseInt(br.readLine());
 
         Edge[] network = new Edge[M];
-        int[] parent = new int[N + 1];
+        parent = new int[N + 1];
 
         // parent 배열을 초기화
         for (int i = 0; i <= N; i++) {
@@ -40,9 +40,9 @@ public class ConnectNetwork {
         for (int i = 0; i < M; i++) {
             Edge edge = network[i];
 
-            if (!hasSameParent(parent, edge.start, edge.end)) { // 사이클이 발생하지 않는다면
+            if (!hasSameParent( edge.start, edge.end)) { // 사이클이 발생하지 않는다면
                 // 간선을 연결하고 비용을 가산
-                union(parent, edge.start, edge.end);
+                union(edge.start, edge.end);
                 ans += edge.weight;
             }
         }
@@ -67,19 +67,19 @@ public class ConnectNetwork {
         }
     }
 
-    private static int getParent(int[] parent, int x) {
+    private static int getParent(int x) {
         if (parent[x] == x) {
             return x;
         }
 
-        parent[x] = getParent(parent, parent[x]);
+        parent[x] = getParent(parent[x]);
         return parent[x];
     }
 
     // 두 부모를 합치는 함수. 더 작은 부모로 합친다.
-    private static void union(int[] parent, int x, int y) {
-        x = getParent(parent, x);
-        y = getParent(parent, y);
+    private static void union(int x, int y) {
+        x = getParent(x);
+        y = getParent(y);
 
         if (x < y) {
             parent[y] = x;
@@ -89,9 +89,9 @@ public class ConnectNetwork {
     }
 
     // 같은 부모를 가지는지 확인
-    private static boolean hasSameParent(int[] parent, int x, int y) {
-        x = getParent(parent, x);
-        y = getParent(parent, y);
+    private static boolean hasSameParent(int x, int y) {
+        x = getParent(x);
+        y = getParent(y);
         return x == y;
     }
 }
